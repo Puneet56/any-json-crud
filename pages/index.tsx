@@ -15,6 +15,8 @@ const getKeys = (data: any[]) => {
 
 	if (!obj) return [];
 
+	return Object.keys(obj).filter((item) => typeof obj[item] !== "object");
+
 	return Object.keys(obj);
 };
 
@@ -26,7 +28,7 @@ const getHeaders = (data: string[]) =>
 
 const Home = <T extends {}>({ data = [] }: { data: T[] }) => {
 	let keys = getKeys(data);
-	const headers = getHeaders(keys);
+	const headers = getHeaders(keys as string[]);
 
 	return (
 		<div className="flex min-h-screen bg-gray-800 flex-col items-center justify-start py-2">
@@ -36,7 +38,7 @@ const Home = <T extends {}>({ data = [] }: { data: T[] }) => {
 			</Head>
 
 			<div className="container h-full flex flex-col items-center justify-start border">
-				<h1 className="text-4xl text-white font-bold">Any JSON CRUD</h1>
+				<h1 className="text-4xl text-white font-bold py-2">Any JSON CRUD</h1>
 				<div
 					style={{
 						gridTemplateColumns: `repeat(${keys.length}, minmax(200px, 1fr))`,
@@ -44,7 +46,7 @@ const Home = <T extends {}>({ data = [] }: { data: T[] }) => {
 					className="grid text-white w-full border h-full overflow-auto"
 				>
 					{headers.map((header, i) => (
-						<p key={i} className="font-bold border text-center">
+						<p key={i} className="font-bold border text-center sticky">
 							{header}
 						</p>
 					))}
@@ -52,7 +54,7 @@ const Home = <T extends {}>({ data = [] }: { data: T[] }) => {
 					{data.map((item, i) => (
 						<Fragment key={i}>
 							{keys.map((key, j) => (
-								<p key={j} className="border text-center">
+								<p key={j} className="border text-center px-4 py-2 flex items-center justify-center">
 									{/* @ts-ignore   */}
 									{item[key]}
 									{/* TODO:fix this */}
@@ -69,11 +71,13 @@ const Home = <T extends {}>({ data = [] }: { data: T[] }) => {
 export default Home;
 
 export const getServerSideProps: GetServerSideProps = async () => {
-	const API_URL = "https://622386e63af069a0f9a47530.mockapi.io/api";
+	// const API_URL = "https://622386e63af069a0f9a47530.mockapi.io/api";
+	const API_URL = "https://jsonplaceholder.typicode.com";
+
 	let users = [];
 
 	try {
-		const data = await axios.get(`${API_URL}/users`);
+		const data = await axios.get(`${API_URL}/comments`);
 		users = data.data;
 	} catch (error) {
 		console.log(error);
