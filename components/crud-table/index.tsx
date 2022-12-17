@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import { AiFillEdit, AiFillDelete } from "react-icons/ai"
 
 const getKeys = (data: any[]) => {
   let obj = data[0];
@@ -44,11 +45,11 @@ const Table = <T extends {}>({ data = [] }: { data: T[] }) => {
               >
                 {/* @ts-ignore   */}
                 {item[key]}
-                {/* TODO:fix this */}
-              </p>
+                {/* TODO:fix this */} </p>
             ))}
-            <p className="border text-center px-4 py-2 flex items-center justify-center">
-              Hello
+            <p className="border text-center px-4 py-2 flex items-center justify-evenly">
+              <AiFillEdit className="text-2xl" />
+              <AiFillDelete className="text-2xl" />
             </p>
           </Fragment>
         ))}
