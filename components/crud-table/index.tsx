@@ -6,7 +6,7 @@ const getKeys = (data: any[]) => {
 
 	if (!obj) return [];
 
-	return Object.keys(obj).filter(item => typeof obj[item] !== 'object');
+	return Object.keys(obj).filter(Boolean);
 };
 
 const getHeaders = (data: string[]) =>
@@ -44,7 +44,11 @@ const Table = <T extends {}>({ data = [] }: { data: T[] }) => {
 								className="border text-center px-4 py-2 flex items-center justify-center"
 							>
 								{/* @ts-ignore   */}
-								{item[key]}
+								{typeof item[key] === 'object' ? (
+									<Table data={[item[key]]} />
+								) : (
+									item[key]
+								)}
 								{/* TODO:fix this */}{' '}
 							</p>
 						))}

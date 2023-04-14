@@ -24,7 +24,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 	let users = [];
 
 	try {
-		const data = await axios.get(`${API_URL}/posts`);
+		const data = await axios.get(`${API_URL}/users`);
 		users = data.data;
 	} catch (error) {
 		console.log(error);
