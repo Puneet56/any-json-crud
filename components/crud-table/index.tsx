@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
 
 const getKeys = (data: any[]) => {
@@ -18,6 +18,16 @@ const getHeaders = (data: string[]) =>
 const Table = <T extends {}>({ data = [] }: { data: T[] }) => {
 	let keys = getKeys(data);
 	const headers = getHeaders(keys as string[]);
+
+	const [openedKeys, setOpenedKeys] = useState<string[]>([]);
+
+	const toggleOpen = (key: string) => {
+		if (openedKeys.includes(key)) {
+			setOpenedKeys(openedKeys.filter(k => k !== key));
+		} else {
+			setOpenedKeys([...openedKeys, key]);
+		}
+	};
 
 	return (
 		<div className="container h-full flex flex-col items-center justify-start border">
@@ -45,7 +55,10 @@ const Table = <T extends {}>({ data = [] }: { data: T[] }) => {
 							>
 								{/* @ts-ignore   */}
 								{typeof item[key] === 'object' ? (
-									<Table data={[item[key]]} />
+									// <Table data={[item[key]]} />
+									<button onClick={() => toggleOpen(key)} className="text-2xl">
+										{openedKeys.includes(key) ? '-' : '+'}
+									</button>
 								) : (
 									item[key]
 								)}
@@ -56,6 +69,19 @@ const Table = <T extends {}>({ data = [] }: { data: T[] }) => {
 							<AiFillEdit className="text-2xl" />
 							<AiFillDelete className="text-2xl" />
 						</p>
+						{keys.map((key, j) => (
+							<p
+								key={j}
+								className="border text-center px-4 py-2 flex items-center justify-center"
+							>
+								{/* @ts-ignore   */}
+								{typeof item[key] === 'object' && openedKeys.includes(key) ? (
+									<Table data={[item[key]]} />
+								) : (
+									''
+								)}
+							</p>
+						))}
 					</Fragment>
 				))}
 			</div>
